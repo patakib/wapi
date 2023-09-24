@@ -75,3 +75,6 @@ Response:
 
 
 For the full data, you need to attach your <b>{API_KEY}</b> as a value to the key: <b>api-key</b> into the HTTP request header.
+
+### Stop Services and Delete database
+`docker compose --env-file .env.secret down --rmi all -v`
