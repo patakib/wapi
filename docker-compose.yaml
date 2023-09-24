@@ -1,0 +1,34 @@
+version: '3'
+
+volumes:
+  wapi_pgdata:
+
+services:
+  weatherdb:
+    image: postgres:latest
+    restart: always
+    environment: 
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASS}
+        - POSTGRES_DB=${POSTGRES_DB}  
+    ports: 
+        - "${POSTGRES_PORT}:5432"
+    volumes: 
+        - ./csv:/var/lib/postgresql/csvs 
+        - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+        - ./wapi_pgdata:/var/lib/postgresql/data
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    volumes:
+      - ./wait-for-it.sh:/usr/local/bin/wait-for-it.sh
+    depends_on:
+      - weatherdb
+    command: ["./wait-for-it.sh", "weatherdb:5432", "--", "./weatherapi"]
+
+networks:
+  default:
+    name: weatherApiNet
