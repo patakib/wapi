@@ -6,7 +6,7 @@ The underlying database is PostgreSQL.
 Daily weather data is available for 3 cities: <b>Vienna, Sopron, Budapest</b> - from <b>1980-01-01 to 2023-09-15</b>.
 
 There are two ways to interact with the API: with API-key and without.  
-In a real-life scenarion, there could be two roles: a basic user and a data analyst.
+In a real-life scenario, there could be two roles: a <b>basic user and a data analyst</b>.
 If you do not use an API key, limited information is available. By using API-key, all the data is available for data analysts.
 
 ## Quickstart
@@ -34,14 +34,17 @@ Make sure both services are available (database and application) and running on 
 
 ### Endpoints
 There are two endpoints for normal users and data analysts:  
+
+1.  
 `localhost:{API_PORT}/api/daily/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
 
 For example:  
 `http://localhost:3000/api/daily/Sopron/2021-01-03`  
 
+2.  
 `localhost:{API_PORT}/api/daily/full/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
 
 For example:  
 `http://localhost:3000/api/daily/full/Sopron/2021-01-03`  
 
-For the latter you need to add your <b>{API_KEY}</b> as a value to the key: <b>api-key</b> to the HTTP request header.
+For the full data, you need to attach your <b>{API_KEY}</b> as a value to the key: <b>api-key</b> into the HTTP request header.
