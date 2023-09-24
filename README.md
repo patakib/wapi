@@ -35,13 +35,13 @@ Make sure both services are available (database and application) and running on 
 ### Endpoints
 There are two endpoints for normal users and data analysts:  
 
-1.  
+1. Limited data for normal users:   
 `localhost:{API_PORT}/api/daily/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
 
 For example:  
 `http://localhost:3000/api/daily/Sopron/2021-01-03`  
 
-2.  
+2. Extended data for data analysts:  
 `localhost:{API_PORT}/api/daily/full/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
 
 For example:  
