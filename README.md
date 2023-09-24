@@ -54,5 +54,24 @@ Response:
 `localhost:{API_PORT}/api/daily/full/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
 For example:  
 `http://localhost:3000/api/daily/full/Sopron/2021-01-03`  
+Response:  
+```
+{  
+  "city": "Sopron",  
+  "date": "2021-01-03T00:00:00Z",  
+  "temperature_2m_max": 6.4,  
+  "temperature_2m_min": 1.6,  
+  "temperature_2m_mean": 3.9,  
+  "sunrise": "2021-01-03T08:42:00Z",  
+  "sunset": "2021-01-03T17:14:00Z",  
+  "precipitation_sum": 1.4,  
+  "rain_sum": 1.4,  
+  "snowfall_sum": 0,  
+  "precipitation_hours": 7,  
+  "windspeed_10m_max": 14.8,  
+  "winddirection_10m_dominant": 156  
+}
+```
+
 
 For the full data, you need to attach your <b>{API_KEY}</b> as a value to the key: <b>api-key</b> into the HTTP request header.
