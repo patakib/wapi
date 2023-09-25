@@ -36,7 +36,7 @@ func customApiFuncDecorator(caf customApiFunc) http.HandlerFunc {
 		if err := caf(w, r); err != nil {
 			WriteJSON(w, http.StatusBadRequest, ServerError{Error: err.Error()})
 		}
-		log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))
+		log.Printf("Method: %s -- Path: %s -- Duration: %v", r.Method, r.URL.Path, time.Since(start))
 	}
 }
 
