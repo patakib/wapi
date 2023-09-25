@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
@@ -24,10 +25,18 @@ type ServerError struct {
 }
 
 func customApiFuncDecorator(caf customApiFunc) http.HandlerFunc {
+	// A middleware function to enable logging and error return from ServeHTTP method
 	return func(w http.ResponseWriter, r *http.Request) {
+		file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.SetOutput(file)
+		start := time.Now()
 		if err := caf(w, r); err != nil {
 			WriteJSON(w, http.StatusBadRequest, ServerError{Error: err.Error()})
 		}
+		log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))
 	}
 }
 

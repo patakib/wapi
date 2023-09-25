@@ -8,13 +8,6 @@ import (
 	"github.com/DATA-DOG/go-sqlmock"
 )
 
-func TestGetDailyWeather(t *testing.T) {
-}
-
-func TestGetDailyWeatherWithAuth(t *testing.T) {
-
-}
-
 func TestScanToDailyWeather(t *testing.T) {
 	db, mock, err := sqlmock.New()
 	if err != nil {
