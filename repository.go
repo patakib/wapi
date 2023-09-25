@@ -19,7 +19,7 @@ type DailyWeather struct {
 	PrecipitationSum         float32   `json:"precipitation_sum"`
 	RainSum                  float32   `json:"rain_sum"`
 	SnowSum                  float32   `json:"snowfall_sum"`
-	PrecipitationHours       float32   `json:"precipitation_hours"`
+	PrecipitationHours       int       `json:"precipitation_hours"`
 	Windspeed10mMax          float32   `json:"windspeed_10m_max"`
 	Winddirection10mDominant int       `json:"winddirection_10m_dominant"`
 }
