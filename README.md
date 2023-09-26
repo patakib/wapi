@@ -36,9 +36,9 @@ Make sure both services are available (database and application) and running on 
 There are two endpoints for normal users and data analysts:  
 
 1. Limited data for normal users:   
-`localhost:{API_PORT}/api/daily/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
+`localhost:{8080}/api/city={CITY[Sopron,Vienna or Budapest]}&date={YYYY-MM-DD}`  
 For example:  
-`http://localhost:3000/api/daily/Sopron/2021-01-03`   
+`http://localhost:8080/api/city=Sopron&date=2021-01-03`   
 Response:  
 ```
 {  
@@ -51,9 +51,9 @@ Response:
 
 
 2. Extended data for data analysts:  
-`localhost:{API_PORT}/api/daily/full/{CITY[Sopron,Vienna or Budapest]}/{YYYY-MM-DD}`  
+`localhost:{API_PORT}/api/city={CITY[Sopron,Vienna or Budapest]}&date={YYYY-MM-DD}`  
+API key sent as "api-key" value in header (or in frontend it can be provided in the form).
 For example:  
-`http://localhost:3000/api/daily/full/Sopron/2021-01-03`  
 Response:  
 ```
 {  
@@ -78,3 +78,4 @@ For the full data, you need to attach your <b>{API_KEY}</b> as a value to the ke
 
 ### Stop Services and Delete database
 `docker compose --env-file .env.secret down --rmi all -v`
+Delete `wapi_pgdata` folder (this is the persistent volume of the Postgres container).
