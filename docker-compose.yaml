@@ -17,7 +17,7 @@ services:
         - ./csv:/var/lib/postgresql/csvs 
         - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
         - ./wapi_pgdata:/var/lib/postgresql/data
-  app:
+  api:
     build: 
       context: .
       dockerfile: Dockerfile
@@ -28,6 +28,12 @@ services:
     depends_on:
       - weatherdb
     command: ["./wait-for-it.sh", "weatherdb:5432", "--", "./weatherapi"]
+  web:
+    build: ./nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
 
 networks:
   default:

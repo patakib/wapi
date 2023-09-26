@@ -13,7 +13,10 @@ import (
 )
 
 func WriteJSON(w http.ResponseWriter, status int, v any) error {
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, api-key")
 	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	w.WriteHeader(status)
 	return json.NewEncoder(w).Encode(v)
 }
@@ -72,6 +75,10 @@ func GetApiKey() string {
 }
 
 func (server *Server) handleGetDailyWeather(w http.ResponseWriter, r *http.Request) error {
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, api-key")
+	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	if r.Method == "GET" {
 		vars := mux.Vars(r)
 		dailyWeatherList, err := server.repository.GetDailyWeather(vars["city"], vars["day"])
@@ -85,6 +92,10 @@ func (server *Server) handleGetDailyWeather(w http.ResponseWriter, r *http.Reque
 
 func (server *Server) handleGetDailyWeatherWithAuth(w http.ResponseWriter, r *http.Request) error {
 	apiKey := GetApiKey()
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, api-key")
+	w.Header().Add("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	if r.Method == "GET" {
 		if r.Header.Get("api-key") == apiKey {
 			vars := mux.Vars(r)

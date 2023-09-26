@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<style>
+table, th, td {
+  border:1px solid black;
+}
+</style>
+<body>
+
+<h2>Historical Weather API</h2>
+
+<div>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city" />
+</div>
+<div>
+    <label for="date">Date (in "YYYY-MM-HH" format):</label>
+    <input type="text" id="date" name="date" />
+</div>
+<div>
+    <label for="apikey">API-Key:</label>
+    <input type="password" id="apikey" name="apikey" />
+</div>
+    <input type="submit" onclick="getWeather();" value="Get Weather Data" />
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
