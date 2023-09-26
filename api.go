@@ -58,8 +58,7 @@ func NewAPIServer(listenAddress string, repository Repository) *Server {
 func (server *Server) Run() {
 	router := mux.NewRouter()
 	api := router.PathPrefix("/api").Subrouter()
-	api.HandleFunc("/daily/{city}/{day}", customApiFuncDecorator(server.handleGetDailyWeather))
-	api.HandleFunc("/daily/full/{city}/{day}", customApiFuncDecorator(server.handleGetDailyWeatherWithAuth))
+	api.HandleFunc("/city={city}&date={day}", customApiFuncDecorator(server.handleGetDailyWeatherWithAuth))
 
 	log.Println("REST API Server is up and running on port: ", server.listenAddress)
 
@@ -75,10 +74,6 @@ func GetApiKey() string {
 }
 
 func (server *Server) handleGetDailyWeather(w http.ResponseWriter, r *http.Request) error {
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, api-key")
-	w.Header().Add("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	if r.Method == "GET" {
 		vars := mux.Vars(r)
 		dailyWeatherList, err := server.repository.GetDailyWeather(vars["city"], vars["day"])
@@ -92,10 +87,6 @@ func (server *Server) handleGetDailyWeather(w http.ResponseWriter, r *http.Reque
 
 func (server *Server) handleGetDailyWeatherWithAuth(w http.ResponseWriter, r *http.Request) error {
 	apiKey := GetApiKey()
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, api-key")
-	w.Header().Add("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
 	if r.Method == "GET" {
 		if r.Header.Get("api-key") == apiKey {
 			vars := mux.Vars(r)
@@ -105,7 +96,7 @@ func (server *Server) handleGetDailyWeatherWithAuth(w http.ResponseWriter, r *ht
 			}
 			return WriteJSON(w, http.StatusOK, dailyWeatherList)
 		} else {
-			return fmt.Errorf("API Key is not valid.")
+			return server.handleGetDailyWeather(w, r)
 		}
 	}
 	return fmt.Errorf("Method not allowed: %s", r.Method)
