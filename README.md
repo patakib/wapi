@@ -79,3 +79,6 @@ For the full data, you need to attach your <b>{API_KEY}</b> as a value to the ke
 ### Stop Services and Delete database
 `docker compose --env-file .env.secret down --rmi all -v`
 Delete `wapi_pgdata` folder (this is the persistent volume of the Postgres container).
+
+### Credits
+Credits to open-meteo.com Historical Weather API for the data.
