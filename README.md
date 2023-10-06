@@ -9,6 +9,9 @@ There are two ways to interact with the API: with API-key and without.
 In a real-life scenario, there could be two roles: a <b>basic user and a data analyst</b>.
 If you do not use an API key, limited information is available. By using API-key, all the data is available for data analysts.
 
+The architecture of the application is the following:
+[](wapi.svg)
+
 ## Quickstart
 
 ### Dependencies
