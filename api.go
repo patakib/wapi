@@ -59,6 +59,7 @@ func (server *Server) Run() {
 	router := mux.NewRouter()
 	api := router.PathPrefix("/api").Subrouter()
 	api.HandleFunc("/city={city}&date={day}", customApiFuncDecorator(server.handleGetDailyWeatherWithAuth))
+	api.HandleFunc("/forecast/city={city}&date={day}", customApiFuncDecorator(server.handleForecastDailyWeather))
 
 	log.Println("REST API Server is up and running on port: ", server.listenAddress)
 
@@ -77,6 +78,18 @@ func (server *Server) handleGetDailyWeather(w http.ResponseWriter, r *http.Reque
 	if r.Method == "GET" {
 		vars := mux.Vars(r)
 		dailyWeatherList, err := server.repository.GetDailyWeather(vars["city"], vars["day"])
+		if err != nil {
+			return err
+		}
+		return WriteJSON(w, http.StatusOK, dailyWeatherList)
+	}
+	return fmt.Errorf("Method not allowed: %s", r.Method)
+}
+
+func (server *Server) handleForecastDailyWeather(w http.ResponseWriter, r *http.Request) error {
+	if r.Method == "GET" {
+		vars := mux.Vars(r)
+		dailyWeatherList, err := server.repository.ForecastDailyWeather(vars["city"], vars["day"])
 		if err != nil {
 			return err
 		}

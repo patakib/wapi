@@ -1,9 +1,10 @@
-# Historical Weather API
+# Weather API
 
 ## Overview
 This is a REST API written in Go (Golang). 
 The underlying database is PostgreSQL.  
 Daily weather data is available for 3 cities: <b>Vienna, Sopron, Budapest</b> - from <b>1980-01-01 to 2023-09-15</b>.
+Forecast functionality for one day is also available.
 
 There are two ways to interact with the API: with API-key and without.  
 In a real-life scenario, there could be two roles: a <b>basic user and a data analyst</b>.
@@ -36,7 +37,7 @@ Make sure both services are available (database and application) and running on 
 `docker ps`  
 
 ### Endpoints
-There are two endpoints for normal users and data analysts:  
+There are three endpoints for normal users and data analysts:  
 
 1. Limited data for normal users:   
 `localhost:{8080}/api/city={CITY[Sopron,Vienna or Budapest]}&date={YYYY-MM-DD}`  
@@ -76,8 +77,23 @@ Response:
 }
 ```
 
-
 For the full data, you need to attach your <b>{API_KEY}</b> as a value to the key: <b>api-key</b> into the HTTP request header.
+
+3. Basic forecast data for normal users:
+`localhost:{API_PORT}/api/forecast/city={CITY[Sopron,Vienna or Budapest]}&date={YYYY-MM-DD}`
+API key is not needed for forecast.
+
+For example:  
+`http://localhost:8080/api/forecast/city=Sopron&date=2021-01-03`   
+Response:  
+```
+{  
+  "city": "Sopron",  
+  "temperature_2m_mean": 3.9,  
+  "precipitation_sum": 1.4  
+}
+```
+
 
 ### Stop Services and Delete database
 `docker compose --env-file .env.secret down --rmi all -v`

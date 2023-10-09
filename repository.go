@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"math/rand"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -31,9 +32,16 @@ type DailyWeatherReduced struct {
 	PrecipitationSum float32 `json:"precipitation_sum"`
 }
 
+type DailyWeatherReducedModified struct {
+	City             string  `json:"city"`
+	Temp2mMean       float32 `json:"temperature_2m_mean"`
+	PrecipitationSum float32 `json:"precipitation_sum"`
+}
+
 type Repository interface {
 	GetDailyWeatherWithAuth(city, day string) (*DailyWeather, error)
 	GetDailyWeather(city, day string) (*DailyWeatherReduced, error)
+	ForecastDailyWeather(city, day string) (*DailyWeatherReducedModified, error)
 }
 
 type PostgresRepository struct {
@@ -77,6 +85,36 @@ func (pr *PostgresRepository) GetDailyWeather(city, day string) (*DailyWeatherRe
 	return dailyWeatherList[0], nil
 }
 
+func (pr *PostgresRepository) ForecastDailyWeather(city, day string) (*DailyWeatherReducedModified, error) {
+	dayTime, error := time.Parse("2006-01-02", day)
+	if error != nil {
+		fmt.Errorf("Date cannot be parsed: %s", day)
+	}
+	randomNr := rand.Intn(20-1) + 1
+	modifiedDay := dayTime.AddDate(-randomNr, 0, 0)
+	modifiedDayStr := modifiedDay.Format("2006-01-02")
+	rows, err := pr.db.Query("SELECT city, temperature_2m_mean, precipitation_sum_mm FROM weather_daily WHERE city LIKE $1 AND date=$2", city, modifiedDayStr)
+	if err != nil {
+		return nil, err
+	}
+	dailyWeatherList := []*DailyWeatherReducedModified{}
+	for rows.Next() {
+		dailyWeatherItem, err := scanToDailyWeatherReducedModified(rows)
+		if err != nil {
+			return nil, err
+		}
+		dailyWeatherList = append(dailyWeatherList, dailyWeatherItem)
+	}
+	if len(dailyWeatherList) == 0 {
+		return nil, fmt.Errorf(
+			"Weather forecast cannot be generated.",
+			day,
+			city,
+		)
+	}
+	return dailyWeatherList[0], nil
+}
+
 func (pr *PostgresRepository) GetDailyWeatherWithAuth(city, day string) (*DailyWeather, error) {
 	rows, err := pr.db.Query("SELECT * FROM weather_daily WHERE city LIKE $1 AND date=$2", city, day)
 	if err != nil {
@@ -105,6 +143,16 @@ func scanToDailyWeatherReduced(rows *sql.Rows) (*DailyWeatherReduced, error) {
 	err := rows.Scan(
 		&dailyWeatherItem.City,
 		&dailyWeatherItem.Date,
+		&dailyWeatherItem.Temp2mMean,
+		&dailyWeatherItem.PrecipitationSum)
+
+	return dailyWeatherItem, err
+}
+
+func scanToDailyWeatherReducedModified(rows *sql.Rows) (*DailyWeatherReducedModified, error) {
+	dailyWeatherItem := new(DailyWeatherReducedModified)
+	err := rows.Scan(
+		&dailyWeatherItem.City,
 		&dailyWeatherItem.Temp2mMean,
 		&dailyWeatherItem.PrecipitationSum)
 
