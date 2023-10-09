@@ -13,7 +13,7 @@
 
 <h2 class="text-center">Historical Weather API</h2>
 <br>
-<p class="text-center">Data is available from 1980-01-01 to 2023-09-15</p>
+<p class="text-center">Data is available from 1980-01-01 to 2023-09-15 or forecast.</p>
 <p class="text-center">Locations available: Vienna, Sopron, Budapest.</p>
 <br>
 <br>
@@ -35,7 +35,8 @@
         <input type="password" class="form-control" placeholder="API Key" aria-label="Api Key" id="apikey" name="apikey">
     </div>
 </div>
-<button class="btn btn-primary align-items-center justify-content-center" type="submit" onclick="getWeather();">Get Data</button>
+<button class="btn btn-primary align-items-center justify-content-center" type="submit" onclick="getWeather();">Get Historical Data</button>
+<button class="btn btn-primary align-items-center justify-content-center" type="submit" onclick="forecastWeather();">Get Forecast Data</button>
 </div>
 <br>
 <table class="table table-striped table-hover">

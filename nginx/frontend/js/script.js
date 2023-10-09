@@ -43,5 +43,36 @@ async function getWeather() {
     }
 };
 
+async function forecastWeather() {
+    let baseUrl = "/api/forecast/";
+    let city = document.getElementById("city").value;
+    let date = document.getElementById("date").value;
+    let apiKey = document.getElementById("apikey").value;
+    suffix = `city=${city}&date=${date}`
+    url = baseUrl.concat(suffix)
+
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            'api-key': apiKey
+        }
+    });
+    const weather = await response.json();
+    let tableBody = document.getElementById("results");
+    tableBody.innerHTML = "";
+    for (let key in weather) {
+        let row = document.createElement("tr")
+        let field = document.createElement("td")
+        let value = document.createElement("td")
+        field.innerText = dataMap[key]
+        value.innerText = weather[key] 
+        row.appendChild(field)
+        row.appendChild(value)
+        tableBody.appendChild(row)
+    }
+};
+
+
+
 
 
